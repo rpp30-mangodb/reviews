@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "lint" : "eslint --fix",
+    "start": "nodemon server/index.js",
+    "lint": "eslint --fix",
     "test": "nyc --reporter=text mocha spec/server-spec.js; RES=$?; kill %1; exit $RES"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "mongoose": "^6.0.11",
     "nodemon": "^2.0.13",
     "pg": "^8.7.1"
   },
