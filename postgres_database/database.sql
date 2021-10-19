@@ -1,7 +1,24 @@
-CREATE DATABASE atelier;
+CREATE DATABASE atelierApi;
+--\c atelierapi
 -- Table: public.review
 
 -- DROP TABLE public.review;
+
+CREATE TABLE IF NOT EXISTS review
+(
+    id SERIAL PRIMARY KEY,
+    product_id integer,
+    rating integer,
+    date date,
+    summary CHAR,
+    body VARCHAR(1000),
+    recommend boolean,
+    reported boolean,
+    reviewer_name CHAR,
+    reviewer_email CHAR,
+    response VARCHAR(1000),
+    helpfulness INT
+);
 
 CREATE TABLE IF NOT EXISTS public.review
 (
