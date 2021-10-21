@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/database2', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
 
 //layout1
 let reviewSchema = mongoose.Schema({
@@ -104,8 +104,17 @@ let readCharacteristicReviews = (cb) => {
 
 let readReviewsPhotos = (cb) => {
   console.log('reading readReviewsPhotos from reviews-->');
-  reviews_photos.find().exec(
-    function(err, data) {
+  reviews_photos.aggregate(
+    [
+      {
+        '$group': {
+          '_id': '$review_id',
+          photos: {
+            $push: {id: '$id', url: '$url'}
+          }
+        }
+      }
+    ], function(err, data) {
       if (err) {
         cb(err, null);
       } else {
@@ -114,6 +123,17 @@ let readReviewsPhotos = (cb) => {
       }
     }
   );
+
+  // reviews_photos.find().exec(
+  //   function(err, data) {
+  //     if (err) {
+  //       cb(err, null);
+  //     } else {
+  //       console.log('Data-->', data);
+  //       cb(null, data);
+  //     }
+  //   }
+  // );
 
 };
 
