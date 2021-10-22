@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 
-// //layout photo
+//layout photo
 let reviewsPhotosSchema = mongoose.Schema({
 
   _id: Number,
@@ -11,6 +11,6 @@ let reviewsPhotosSchema = mongoose.Schema({
 
 
 });
-// //constructorctor
+//constructorctor
 module.exports = mongoose.model('reviewphotosById', reviewsPhotosSchema);
 

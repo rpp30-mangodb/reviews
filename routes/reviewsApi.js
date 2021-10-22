@@ -7,8 +7,8 @@ const Reviews = require('../mongo_database/reviews');
 const Photos = require('../mongo_database/reviewPhotos');
 
 router.get('/', (req, res, next) => {
-  // console.log('hello from reviews Routes');
-  Reviews.find({_id: 5501})
+  console.log('hello from reviews Routes', req.query);
+  Reviews.find({_id: req.query.product_id})
     .exec()
     .then(reviewData => {
       console.log('From database', reviewData);
@@ -73,7 +73,8 @@ router.get('/', (req, res, next) => {
               // console.log('results-->', results);
             }
             res.status(200).json({
-              product_id: reviewData[0]._id,
+              product: reviewData[0]._id,
+              page: 0,
               count: reviewData[0].count,
               results: results,
               request: {

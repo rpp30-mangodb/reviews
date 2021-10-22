@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mongoDatabase = require('../mongo_database');
 
 const reviewsRoute = require('../routes/reviewsApi');
+const metaRoute = require('../routes/reviewMeta');
 
 const port = process.env.PORT || 8080;
 const server = http.createServer(app);
@@ -33,7 +34,7 @@ app.use((req, res, next) => {
 
 // ******ROUTES**********
 app.use('/reviews', reviewsRoute);
-
+app.use('/reviews/meta', metaRoute);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');
