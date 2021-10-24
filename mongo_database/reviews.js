@@ -6,23 +6,25 @@ const mongoose = require('mongoose');
 let reviewsSchema = mongoose.Schema({
 
   _id: Number,
+  id: Number,
   product_id: Number,
-  count: Number,
-  data: [ {
+  rating: Number,
+  date: Date,
+  summary: String,
+  body: String,
+  recommend: Boolean,
+  reported: Boolean,
+  reviewer_Name: String,
+  reviewer_email: String,
+  helpfulness: Number,
+  response: String,
+  photos: [{
     id: Number,
-    product_id: Number,
-    rating: Number,
-    date: Date,
-    summary: String,
-    body: String,
-    recommend: Boolean,
-    reported: Boolean,
-    reviewer_Name: String,
-    reviewer_email: String,
-    helpfulness: Number,
-    response: String,
+    review_id: Number,
+    url: String
+  }]
 
-  }],
+
 
 
 });
