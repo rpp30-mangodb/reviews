@@ -9,8 +9,10 @@ const Characteristic_reviews = require('../mongo_database/reviewChara');
 const Reviews = require('../mongo_database/reviews');
 
 const findRating = (reviewData) => {
+  console.log('checkingreview-1->', reviewData);
   let rating1 = 0; let rating2 = 0; let rating3 = 0; let rating4 = 0; let rating5 = 0;
   for (let i = 0; i < reviewData.length; i++) {
+    console.log('checkingreview-->', reviewData[i]);
     let each = reviewData[i];
 
     switch (each.rating) {
@@ -53,7 +55,7 @@ const computation = (charData, data)=>{
   let characteristic = [];
   for (let i = 0; i < data.length; i++) {
     let each = data[i];
-
+    let metaChar = [];
     // console.log('test-->', i);
     // console.log('inside computation Each-1->', each);
     for (let j = 0; j < charData.length; j++) {
@@ -66,7 +68,7 @@ const computation = (charData, data)=>{
       if (each.id === eachChar[0]._id) {
         // console.log('length:', eachChar[0].data.length);
         for (let k = 0; k < eachChar[0].data.length; k++ ) {
-
+          // console.log('each data', eachChar[0].data[i]);
           let finalEach = eachChar[0].data[k];
 
           sum += finalEach.value;
@@ -77,21 +79,24 @@ const computation = (charData, data)=>{
 
       // console.log('results->', each.id, each.name, avg);
       if (avg > 0) {
-        characteristic.push ( {'id': each.id, 'name': each.name, 'value': avg});
+
+        metaChar.push (each.name, {'id': each.id, 'value': avg});
       }
 
-      // console.log('characteristic: 1->', characteristic);
+
 
     }
-
-
-    // console.log('characteristic: 2->', characteristic);
-
+    // console.log('characteristic: 1->', metaChar);
+    // characteristic[metaChar] =
+    characteristic.push(metaChar);
   }
+  let dataFinal = {};
+  characteristic.forEach(each=>{
+    dataFinal[each[0]] = each[1];
+  });
 
-
-  // console.log('characteristic: computation-->', characteristic);
-  return characteristic;
+  // console.log('characteristic: computation-->', dataFinal);
+  return dataFinal;
 };
 
 
@@ -104,16 +109,17 @@ const fetchCharacteristic = (data) =>{
 router.get('/', (req, res, next) => {
   console.log('This is from MetaData Route', req.query);
 
-  Reviews.find({_id: req.query.product_id})
+  Reviews.find({product_id: req.query.product_id})
     .exec()
     .then(meta1=> {
-      // console.log('From database----------------------', meta1[0]);
-      let ratingResult = findRating(meta1[0].data);
-      let recommendResult = findrecommend(meta1[0].data);
+      console.log('From database----------------------', meta1);
+      let ratingResult = findRating(meta1);
+      console.log('rating-->', ratingResult);
+      let recommendResult = findrecommend(meta1);
       Characteristic.find({_id: req.query.product_id})
         .exec()
         .then(charData=>{
-          console.log('Characterictic', charData[0]);
+          console.log('Characterictic', charData);
           // const resultChar = fetchCharacteristic(charData[0].data);
           const promises = [];
           const data = charData[0].data;
@@ -126,37 +132,25 @@ router.get('/', (req, res, next) => {
             .then((reviewCharData)=>{
               const metaChar = computation(reviewCharData, charData[0].data);
               console.log('metaChar-->', metaChar);
+
+              if (true) {
+                res.status(200).json({
+                  product_id: req.query.product_id,
+                  ratings: ratingResult,
+                  recommended: recommendResult,
+                  characteristics: metaChar,
+
+                });
+              } else {
+                res.status(404).json({ message: 'No review Meta data found for provided ID' });
+              }
+
             })
             .catch(error=>{ console.log('error getting Characteristic_reviews'); });
         });
     })
     .catch(err=>{ console.log(err); });
-    
-  if (true) {
-    res.status(200).json({
-      product_id: req.query.product_id,
-      ratings: {
-        1: '8',
-        2: '8',
-        3: '8',
-        4: '8',
-        5: '8',
-      },
-      recommended: {
-        false: 3,
-        true: 9
-      },
-      characteristics: {
-        'Quality': {
-          'id': 199913,
-          'value': '2.5882352941176471'
-        }
-      }
 
-    });
-  } else {
-    res.status(404).json({ message: 'No review Meta data found for provided ID' });
-  }
 
 });
 
