@@ -39,28 +39,17 @@ router.get('/', (req, res, next) => {
           });
         });
 
-
-
         res.status(200).json({
           product: reviewData[0].product_id,
           page: 1,
           count: reviewData.length,
           results: results,
-          request: {
-            type: 'GET',
-            url: 'http://localhost:8080/reviews'
-          }
+
         });
 
-
-
-        // console.log('results-->', results);
-
-
-      } else {
-        res
-          .status(404)
-          .json({ message: 'No valid entry found for provided ID' });
+        res.status(404).json({
+          message: 'No valid entry found for provided ID'
+        });
       }
 
     })
@@ -72,4 +61,26 @@ router.get('/', (req, res, next) => {
 
 });
 
+//POST
+router.post('/', (req, res, next) => {
+  console.log('POST ROUTE', req.query);
+  const {product_id, rating, summary, body, recommended, name, email} = req.query;
+  const {photos, characteristics} = req.query;
+  // console.log('checking POST query:->', product_id, rating, summary, body, recommended, name, email, photos, characteristics);
+  res.status(201).send('CREATED');
+});
+
+
+//PUT ROUTE
+router.put('/:review_id/helpful', (req, res)=>{
+  console.log('Testing helpful111222222', req.params);
+  const {review_id} = req.params;
+  res.status(204).send();
+});
+
+router.put('/:review_id/report', (req, res, next) => {
+  console.log('Update Report Review', req.params);
+  const {review_id} = req.params;
+  res.status(204).send();
+});
 module.exports = router;

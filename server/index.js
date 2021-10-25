@@ -37,6 +37,7 @@ app.use('/reviews', reviewsRoute);
 app.use('/reviews/meta', metaRoute);
 
 app.use((req, res, next) => {
+  // console.log('checking MAIN request-->', req.url);
   const error = new Error('Not found');
   error.status = 404;
   next(error);
