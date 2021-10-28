@@ -3,7 +3,8 @@ const http = require('http');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const mongoDatabase = require('../mongo_database');
+const mongoose = require('mongoose');
+// const mongoDatabase = require('../mongo_database');
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
@@ -13,6 +14,11 @@ const server = http.createServer(app);
 
 server.listen(port, ()=> {
   console.log(`Server is listening at port ${port}`);
+});
+
+mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connection.once('open', ()=>{
+  console.log('Connected to Atelier Database');
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));

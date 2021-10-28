@@ -9,10 +9,10 @@ const Characteristic_reviews = require('../mongo_database/reviewChara');
 const Reviews = require('../mongo_database/reviews');
 
 const findRating = (reviewData) => {
-  console.log('checkingreview-1->', reviewData);
+  // console.log('checkingreview-1->', reviewData);
   let rating1 = 0; let rating2 = 0; let rating3 = 0; let rating4 = 0; let rating5 = 0;
   for (let i = 0; i < reviewData.length; i++) {
-    console.log('checkingreview-->', reviewData[i]);
+    // console.log('checkingreview-->', reviewData[i]);
     let each = reviewData[i];
 
     switch (each.rating) {
@@ -112,14 +112,14 @@ router.get('/', (req, res, next) => {
   Reviews.find({product_id: req.query.product_id})
     .exec()
     .then(meta1=> {
-      console.log('From database----------------------', meta1);
+      // console.log('From database----------------------', meta1);
       let ratingResult = findRating(meta1);
       console.log('rating-->', ratingResult);
       let recommendResult = findrecommend(meta1);
       Characteristic.find({_id: req.query.product_id})
         .exec()
         .then(charData=>{
-          console.log('Characterictic', charData);
+          // console.log('Characterictic', charData);
           // const resultChar = fetchCharacteristic(charData[0].data);
           const promises = [];
           const data = charData[0].data;
@@ -131,7 +131,7 @@ router.get('/', (req, res, next) => {
           Promise.all(promises)
             .then((reviewCharData)=>{
               const metaChar = computation(reviewCharData, charData[0].data);
-              console.log('metaChar-->', metaChar);
+              // console.log('metaChar-->', metaChar);
 
               if (true) {
                 res.status(200).json({

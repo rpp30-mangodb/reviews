@@ -13,17 +13,20 @@ router.get('/', (req, res, next) => {
     .limit(5)
     .exec()
     .then(reviewData => {
-      console.log('From reviews database', reviewData);
+      // console.log('From reviews database', reviewData);
       const results = [];
       if (reviewData.length > 0) {
         let results = [];
-        reviewData.forEach(review => {
+        reviewData.forEach(review1 => {
           const photoData = [];
+          var review = review1.toObject();
           if (review.photos.length > 0) {
             review.photos.forEach(photo => {
               photoData.push({'id': photo.id, 'url': photo.url});
             });
           }
+          console.log('review-L27>', review, review.name, review.email);
+
 
           results.push({
             'review_id': review.id,
@@ -38,7 +41,7 @@ router.get('/', (req, res, next) => {
             'photos': photoData
           });
         });
-
+        console.log('Results---->L43', results);
         res.status(200).json({
           product: reviewData[0].product_id,
           page: 1,
@@ -47,6 +50,8 @@ router.get('/', (req, res, next) => {
 
         });
 
+
+      } else {
         res.status(404).json({
           message: 'No valid entry found for provided ID'
         });
@@ -57,6 +62,7 @@ router.get('/', (req, res, next) => {
     .catch(err => {
       console.log(err);
       res.status(500).json({ error: err });
+
     });
 
 });

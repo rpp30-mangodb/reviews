@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 //layout1
 let reviewsSchema = mongoose.Schema({
 
-  _id: Number,
+  _id: {type: Number, required: true},
   id: Number,
   product_id: Number,
   rating: Number,
@@ -14,18 +14,15 @@ let reviewsSchema = mongoose.Schema({
   body: String,
   recommend: Boolean,
   reported: Boolean,
-  reviewer_Name: String,
+  reviewer_name: String,
   reviewer_email: String,
   helpfulness: Number,
   response: String,
   photos: [{
     id: Number,
-    review_id: Number,
+    reviewId: Number,
     url: String
   }]
-
-
-
 
 });
 
