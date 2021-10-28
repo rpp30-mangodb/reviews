@@ -1,26 +1,26 @@
 /* eslint-disable camelcase */
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/database2', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
 
 //layout1
-let reviewSchema = mongoose.Schema({
+// let reviewSchema = mongoose.Schema({
 
-  id: Number,
-  product_id: Number,
-  rating: Number,
-  date: Date,
-  summary: String,
-  body: String,
-  recommend: Boolean,
-  reported: Boolean,
-  reviewer_Name: String,
-  reviewer_email: String,
-  photos: [String],
-  helpfulness: Number,
-  response: String,
-});
-//constructorctor
-let Review = mongoose.model('Review', reviewSchema );
+//   id: Number,
+//   product_id: Number,
+//   rating: Number,
+//   date: Date,
+//   summary: String,
+//   body: String,
+//   recommend: Boolean,
+//   reported: Boolean,
+//   reviewer_Name: String,
+//   reviewer_email: String,
+//   photos: [String],
+//   helpfulness: Number,
+//   response: String,
+// });
+// //constructorctor
+// let Review = mongoose.model('Review', reviewSchema );
 
 //layout2
 let characteristic_reviewSchema = mongoose.Schema({
@@ -45,16 +45,7 @@ let characteristicsSchema = mongoose.Schema({
 //constructorctor
 let characteristics = mongoose.model('characteristics', characteristicsSchema);
 
-//layout4
-let reviews_photosSchema = mongoose.Schema({
 
-  id: Number,
-  product_id: Number,
-  name: String
-
-});
-//constructorctor
-let reviews_photos = mongoose.model('reviews_photos', reviews_photosSchema);
 
 
 let readReview = (cb) => {
@@ -104,8 +95,17 @@ let readCharacteristicReviews = (cb) => {
 
 let readReviewsPhotos = (cb) => {
   console.log('reading readReviewsPhotos from reviews-->');
-  reviews_photos.find().exec(
-    function(err, data) {
+  reviews_photos.aggregate(
+    [
+      {
+        '$group': {
+          '_id': '$review_id',
+          photos: {
+            $push: {id: '$id', url: '$url'}
+          }
+        }
+      }
+    ], function(err, data) {
       if (err) {
         cb(err, null);
       } else {
@@ -115,7 +115,18 @@ let readReviewsPhotos = (cb) => {
     }
   );
 
+  // reviews_photos.find().exec(
+  //   function(err, data) {
+  //     if (err) {
+  //       cb(err, null);
+  //     } else {
+  //       console.log('Data-->', data);
+  //       cb(null, data);
+  //     }
+  //   }
+  // );
+
 };
 
 
-module.exports = {readReview, readCharacteristics, readCharacteristicReviews, readReviewsPhotos};
+// module.exports = {readReview, readCharacteristics, readCharacteristicReviews, readReviewsPhotos};

@@ -6,7 +6,10 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "lint": "eslint --fix",
-    "test": "nyc --reporter=text mocha spec/server-spec.js; RES=$?; kill %1; exit $RES"
+    "test": "nyc --reporter=text mocha 'test/review_test.js' --timeout 5000; RES=$?; kill %1; exit $RES",
+    "testJasmine": "jasmine",
+    "test-cover": "istanbul cover --include-all-sources test/index.test.js && istanbul check-coverage",
+    "nyc": "nyc --reporter=html mocha"
   },
   "repository": {
     "type": "git",
@@ -24,13 +27,20 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.11",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.13",
     "pg": "^8.7.1"
   },
   "devDependencies": {
     "chai": "^4.3.4",
     "eslint": "^8.0.1",
+    "istanbul": "^0.4.5",
+    "jasmine": "^3.10.0",
+    "jasmine-console-reporter": "^3.1.0",
+    "jasmine-node": "^3.0.0",
+    "jasmine-supertest": "^1.0.0",
     "mocha": "^9.1.2",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "supertest": "^6.1.6"
   }
 }
