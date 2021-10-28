@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 //layout1
 let reviewsSchema = mongoose.Schema({
 
-  _id: {type: Number, required: true},
+  
   id: Number,
   product_id: Number,
   rating: Number,

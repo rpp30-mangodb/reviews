@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 //layout1
 // let reviewSchema = mongoose.Schema({
