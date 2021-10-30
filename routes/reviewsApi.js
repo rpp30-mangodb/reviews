@@ -54,7 +54,7 @@ router.get('/', (req, res, next) => {
 
 
       } else {
-        res.status(404).json({
+        res.status(500).json({
           message: 'No valid entry found for provided ID'
         });
       }

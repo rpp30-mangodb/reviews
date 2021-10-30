@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
 
+
 const port = process.env.PORT || 8080;
 const server = http.createServer(app);
 
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 // ******ROUTES**********
 app.use('/reviews', reviewsRoute);
 app.use('/reviews/meta', metaRoute);
+
 
 app.use((req, res, next) => {
   // console.log('checking MAIN request-->', req.url);
