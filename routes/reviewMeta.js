@@ -146,10 +146,16 @@ router.get('/', (req, res, next) => {
               }
 
             })
-            .catch(error=>{ console.log('error getting Characteristic_reviews'); });
+            .catch(error=>{
+              console.log('error getting Characteristic_reviews');
+              res.status(404).json({ message: 'No review Meta data found for provided ID' });
+            });
         });
     })
-    .catch(err=>{ console.log(err); });
+    .catch(err=>{
+      console.log(err);
+      res.status(404).json({ message: 'No review Meta data found for provided ID' });
+    });
 
 
 });
