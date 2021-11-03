@@ -9,8 +9,8 @@
     "k6": "k6 run k6StressTest/script.js",
     "test": "nyc --reporter=text mocha 'test/review_test.js' --timeout 5000; RES=$?; kill %1; exit $RES",
     "testJasmine": "jasmine",
-    "test-cover": "istanbul cover --include-all-sources test/index.test.js && istanbul check-coverage",
-    "nyc": "nyc --reporter=html mocha"
+    "test-cover": "istanbul cover --include-all-sources test/index_test.js && istanbul check-coverage",
+    "nyc": "nyc --reporter=html mocha --coverage"
   },
   "repository": {
     "type": "git",

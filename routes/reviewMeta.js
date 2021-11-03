@@ -38,6 +38,7 @@ const findRating = (reviewData) => {
   });
 };
 const findrecommend = (data) => {
+  // console.log('findrecommend-->', data);
   let trueCount = 0; let falseCount = 0;
   for (let i = 0; i < data.length; i++) {
     let each = data[i];
@@ -47,6 +48,7 @@ const findrecommend = (data) => {
       falseCount ++;
     }
   }
+  // console.log('true->', trueCount, falseCount);
   return ({false: falseCount, true: trueCount});
 };
 
@@ -101,36 +103,41 @@ const computation = (charData, data)=>{
 
 
 
-const fetchCharacteristic = (data) =>{
 
-
-};
 // characteristic_id
 router.get('/', (req, res, next) => {
-  console.log('This is from MetaData Route', req.query);
+  // console.log('This is from MetaData Route', req.query);
 
   Reviews.find({product_id: req.query.product_id})
     .exec()
     .then(meta1=> {
       // console.log('From database----------------------', meta1);
       let ratingResult = findRating(meta1);
-      console.log('rating-->', ratingResult);
+      // console.log('rating-->', ratingResult);
       let recommendResult = findrecommend(meta1);
+      // console.log('recommend-->', recommendResult);
       Characteristic.find({_id: req.query.product_id})
         .exec()
         .then(charData=>{
           // console.log('Characterictic', charData);
+          //************** Need to check if there is no data for characteristic****** */
           // const resultChar = fetchCharacteristic(charData[0].data);
           const promises = [];
           const data = charData[0].data;
+          // console.log('data--> L 126', data);
           for (let i = 0; i < data.length; i++) {
             let each = data[i];
-            // console.log('Each-->', each);
+            // console.log('Each-->', each.id);
             promises.push(Characteristic_reviews.find({_id: each.id}).exec());
           }
           Promise.all(promises)
             .then((reviewCharData)=>{
-              const metaChar = computation(reviewCharData, charData[0].data);
+              // console.log('reviewCharData-->', reviewCharData);
+              let metaChar = {};
+              if (reviewCharData[0].length !== 0) {
+                metaChar = computation(reviewCharData, charData[0].data);
+              }
+
               // console.log('metaChar-->', metaChar);
 
               if (true) {
@@ -147,7 +154,7 @@ router.get('/', (req, res, next) => {
 
             })
             .catch(error=>{
-              console.log('error getting Characteristic_reviews');
+              console.log('**L153**error getting Characteristic_reviews', error);
               res.status(404).json({ message: 'No review Meta data found for provided ID' });
             });
         });

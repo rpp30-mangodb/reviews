@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
     .limit(5)
     .exec()
     .then(reviewData => {
-      // console.log('From reviews database', reviewData);
+      console.log('From reviews database', reviewData);
       const results = [];
       if (reviewData.length > 0) {
         let results = [];

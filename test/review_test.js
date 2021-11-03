@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 //supertest- HTTP assertions library that test your node.js
 const request = require('supertest');
+var chai = require('chai');
 const expect = require('chai').expect;
 const assert = require('assert');
 const mongoose = require('mongoose');
@@ -40,7 +41,7 @@ describe('creating document', ()=>{
         assert(!review.isNew);
         done();
       });
-    done();
+    // done();
   });
   //
 });
@@ -73,8 +74,3 @@ describe('Reviews Routing Tests', ()=>{
 
 
 });
-// beforeEach(done=>{
-//   mongoose.connection.collections.testDB.drop(()=>{
-//     done();
-//   });
-// });

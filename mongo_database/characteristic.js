@@ -12,4 +12,4 @@ let characteristicSchema = mongoose.Schema({
 
 });
 //constructorctor
-module.exports = mongoose.model('characteristicByProductId', characteristicSchema);
+module.exports = mongoose.model('characteristicbyproductid', characteristicSchema);
