@@ -1,20 +1,24 @@
 const express = require('express');
 const http = require('http');
 const app = express();
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
 // const mongoDatabase = require('../mongo_database');
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
 
 
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
+
+
 const server = http.createServer(app);
 
-server.listen(port, ()=> {
-  console.log(`Server is listening at port ${port}`);
+
+server.listen(PORT, ()=> {
+  console.log(`Server is listening at port ${PORT}`);
 });
 
 mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
@@ -60,46 +64,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-// app.get('/', (req, res) => {
-//   console.log('Listening from port 5000');
-// mongoDatabase.readReview((err, data)=> {
-//   if (err) {
-//     console.log('error', err);
-//     // res.send(err)
-//   } else {
-//     console.log('data back from mongo readReview->', data);
-//     // res.send(data);
-//   }
-// });
-// mongoDatabase.readCharacteristics((err, data)=> {
-//   if (err) {
-//     console.log('error', err);
-//     // res.send(err)
-//   } else {
-//     console.log('data back from mongo readCharacteristics->', data);
-//     // res.send(data);
-//   }
-// });
-// mongoDatabase.readCharacteristicReviews((err, data)=> {
-//   if (err) {
-//     console.log('error', err);
-//     // res.send(err)
-//   } else {
-//     console.log('data back from mongo readCharacteristicReviews->', data);
-//     // res.send(data);
-//   }
-// });
-// mongoDatabase.readReviewsPhotos((err, photos)=> {
-//   if (err) {
-//     console.log('error', err);
-//     // res.send(err)
-//   } else {
-//     console.log('data back from mongo readReviewsPhotos->', photos);
-//     res.json(photos);
-//   }
-// });
 
-// });
 
 module.exports = app;
 

@@ -12,9 +12,9 @@ export const options = {
     contacts: {
       executor: 'constant-arrival-rate',
       rate: 100, // 100 RPS, since timeUnit is the default 1s
-      duration: '5m',
+      duration: '1m',
       preAllocatedVUs: 1,
-      maxVUs: 100,
+      maxVUs: 10,
     },
   },
 };
@@ -24,7 +24,7 @@ export default function () {
   for (let id = 99950; id <= 1000000; id++) {
     const resp = http.batch([
       ['GET', `http://localhost:8080/reviews/meta/?product_id=${id}` ],
-      ['GET', `http://localhost:8080/reviews/?product_id=${id}`]
+      ['GET', `http://localhost:8080/reviews/?product_id=${id}`],
     ]);
 
     check(resp[0], {
