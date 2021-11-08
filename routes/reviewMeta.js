@@ -2,11 +2,36 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const redis = require('redis');
+const REDIS_PORT = process.env.REDIS_PORT || 6379;
+const client = redis.createClient(REDIS_PORT);
 //pick* product_id-575
 //notworking- 5501
 const Characteristic = require('../mongo_database/characteristic');
 const Characteristic_reviews = require('../mongo_database/reviewChara');
 const Reviews = require('../mongo_database/reviews');
+
+const cache = (req, res, next) =>{
+  const {product_id} = req.query;
+  console.log('product_id from redis middleware reviewMeta->', product_id);
+  client.get(product_id, (err, data) => {
+    if (err) { throw err; }
+
+    if ( data !== null) {
+      console.log('data? from Meta->', JSON.parse(data));
+      res.status(200).json({
+        product_id: product_id,
+        ratings: JSON.parse(data).rating,
+        recommended: JSON.parse(data).recommend,
+        characteristics: JSON.parse(data).characteristics,
+
+      });
+
+    } else {
+      next();
+    }
+  });
+};
 
 const findRating = (reviewData) => {
   // console.log('checkingreview-1->', reviewData);
@@ -38,6 +63,7 @@ const findRating = (reviewData) => {
   });
 };
 const findrecommend = (data) => {
+  // console.log('findrecommend-->', data);
   let trueCount = 0; let falseCount = 0;
   for (let i = 0; i < data.length; i++) {
     let each = data[i];
@@ -47,6 +73,7 @@ const findrecommend = (data) => {
       falseCount ++;
     }
   }
+  // console.log('true->', trueCount, falseCount);
   return ({false: falseCount, true: trueCount});
 };
 
@@ -101,38 +128,45 @@ const computation = (charData, data)=>{
 
 
 
-const fetchCharacteristic = (data) =>{
 
-
-};
 // characteristic_id
-router.get('/', (req, res, next) => {
-  console.log('This is from MetaData Route', req.query);
+router.get('/', cache, (req, res, next) => {
+  // console.log('This is from MetaData Route', req.query);
 
   Reviews.find({product_id: req.query.product_id})
     .exec()
     .then(meta1=> {
       // console.log('From database----------------------', meta1);
       let ratingResult = findRating(meta1);
-      console.log('rating-->', ratingResult);
+      // console.log('rating-->', ratingResult);
       let recommendResult = findrecommend(meta1);
+      // console.log('recommend-->', recommendResult);
       Characteristic.find({_id: req.query.product_id})
         .exec()
         .then(charData=>{
           // console.log('Characterictic', charData);
+          //************** Need to check if there is no data for characteristic****** */
           // const resultChar = fetchCharacteristic(charData[0].data);
           const promises = [];
           const data = charData[0].data;
+          // console.log('data--> L 126', data);
           for (let i = 0; i < data.length; i++) {
             let each = data[i];
-            // console.log('Each-->', each);
+            // console.log('Each-->', each.id);
             promises.push(Characteristic_reviews.find({_id: each.id}).exec());
           }
           Promise.all(promises)
             .then((reviewCharData)=>{
-              const metaChar = computation(reviewCharData, charData[0].data);
-              // console.log('metaChar-->', metaChar);
+              // console.log('reviewCharData-->', reviewCharData);
+              let metaChar = {};
+              if (reviewCharData[0].length !== 0) {
+                metaChar = computation(reviewCharData, charData[0].data);
+              }
 
+              // console.log('metaChar-->', metaChar);
+              const results = {'rating': ratingResult, 'recommended': recommendResult, 'characteristics': metaChar };
+              //set data to Redis
+              client.setex(req.query.product_id, 3600, JSON.stringify(results));
               if (true) {
                 res.status(200).json({
                   product_id: req.query.product_id,
@@ -147,7 +181,7 @@ router.get('/', (req, res, next) => {
 
             })
             .catch(error=>{
-              console.log('error getting Characteristic_reviews');
+              console.log('**L153**error getting Characteristic_reviews', error);
               res.status(404).json({ message: 'No review Meta data found for provided ID' });
             });
         });

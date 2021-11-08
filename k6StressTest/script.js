@@ -1,6 +1,5 @@
 import http from 'k6/http';
-import { sleep } from 'k6';
-import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/2.3.1/dist/bundle.js';
+import { sleep, check } from 'k6';
 import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 
 //last product_id: 1,000,011
@@ -13,26 +12,27 @@ export const options = {
     contacts: {
       executor: 'constant-arrival-rate',
       rate: 100, // 100 RPS, since timeUnit is the default 1s
-      duration: '1.5m',
-      preAllocatedVUs: 50,
-      maxVUs: 100,
+      duration: '1m',
+      preAllocatedVUs: 1,
+      maxVUs: 10,
     },
   },
 };
 
 // eslint-disable-next-line func-style
-export default function handleSummary (data) {
-  for (let id = 99920; id <= 1000011; id++) {
-    const resp = http.get(`http://localhost:8080/reviews/?product_id=${id}`, JSON.stringify(data));
+export default function () {
+  for (let id = 99950; id <= 1000000; id++) {
+    const resp = http.batch([
+      ['GET', `http://localhost:8080/reviews/meta/?product_id=${id}` ],
+      ['GET', `http://localhost:8080/reviews/?product_id=${id}`],
+    ]);
 
-    if (resp.status !== 200) {
-      console.error('Could not send summary, got status ' + resp.status);
-    }
+    check(resp[0], {
+      'main page status was 200': (res) => res.status === 200,
+    });
+    sleep(1);
   }
-  return {
-    'summary.html': htmlReport(data),
-    'stdout': textSummary(data, { indent: ' ', enableColors: true }),
-  };
+
 }
 
 // export default function () {
