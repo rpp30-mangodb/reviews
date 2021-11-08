@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 //layout1
 let reviewsSchema = mongoose.Schema({
 
-  
+  //indexing not recommend in development {type:[ Number], index: true},
   id: Number,
   product_id: Number,
   rating: Number,

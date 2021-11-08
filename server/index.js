@@ -9,10 +9,9 @@ const mongoose = require('mongoose');
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
-
+const loaderioRoute = require('../routes/loaderio');
 
 const PORT = process.env.PORT || 8080;
-
 
 const server = http.createServer(app);
 
@@ -21,7 +20,8 @@ server.listen(PORT, ()=> {
   console.log(`Server is listening at port ${PORT}`);
 });
 
-mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://127.0.0.1:27017/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', ()=>{
   console.log('Connected to Atelier Database');
 });
@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 // ******ROUTES**********
 app.use('/reviews', reviewsRoute);
 app.use('/reviews/meta', metaRoute);
-
+app.use('/loaderio-fdedfeef36d70b6f03f99f5a6a9d4fc5', loaderioRoute);
 
 app.use((req, res, next) => {
   // console.log('checking MAIN request-->', req.url);
