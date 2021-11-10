@@ -17,12 +17,12 @@ const Reviews = require('../mongo_database/reviews');
 
 const cache = (req, res, next) =>{
   const {product_id} = req.query;
-  // console.log('product_id from redis middleware->', product_id);
+  console.log('product_id from redis middleware->', product_id);
   client.get(product_id, (err, data) => {
-    if (err) { throw err; }
+    if (err) { console.log('error with cache'); throw err; }
 
     if ( data !== null) {
-      // console.log('REVIEWS********** L 25->', JSON.parse(data).length);
+      console.log('REVIEWS********** L 25->', JSON.parse(data).length);
       res.status(200).json({
         product: product_id,
         page: 1,
