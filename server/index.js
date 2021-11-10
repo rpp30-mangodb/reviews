@@ -20,7 +20,7 @@ server.listen(PORT, ()=> {
   console.log(`Server is listening at port ${PORT}`);
 });
 
-mongoose.connect('mongodb://127.0.0.1:27017/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://rpp30:hellosdc@127.0.0.1:27017/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', ()=>{
   console.log('Connected to Atelier Database');
