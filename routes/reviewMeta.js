@@ -9,7 +9,7 @@ const client = redis.createClient(REDIS_PORT);
 //notworking- 5501
 const Characteristic = require('../mongo_database/characteristic');
 const Characteristic_reviews = require('../mongo_database/reviewChara');
-const Reviews = require('../mongo_database/reviews');
+const Reviews = require('../mongo_database/reviews').review1;
 
 const cache = (req, res, next) =>{
   const {product_id} = req.query;
