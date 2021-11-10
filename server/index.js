@@ -23,7 +23,7 @@ server.listen(PORT, ()=> {
 mongoose.connect('mongodb://rpp30:hellosdc@127.0.0.1:27017/atelierDB?authSource=admin', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', ()=>{
-  console.log('Connected to Atelier Database');
+  console.log('Connected to Atelier Database1');
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
