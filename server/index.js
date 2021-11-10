@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 app.use('/reviews', reviewsRoute);
 app.use('/reviews/meta', metaRoute);
 app.use('/reviews1', dummyRoute); //for testing K6 POST request
-app.use('/loaderio-fdedfeef36d70b6f03f99f5a6a9d4fc5', loaderioRoute);
+app.use('/loaderio-6745e64131d911b566f9c75cc1c43102', loaderioRoute);
 
 app.use((req, res, next) => {
   // console.log('checking MAIN request-->', req.url);
