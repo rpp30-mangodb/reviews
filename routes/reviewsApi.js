@@ -12,16 +12,17 @@ const client = redis.createClient(REDIS_PORT);
 // const jsonCache = new JSONCache(redis);
 
 const Reviews = require('../mongo_database/reviews');
+// console.log('review--> L 15', Reviews );
 // const Photos = require('../mongo_database/reviewPhotos');
 
 const cache = (req, res, next) =>{
   const {product_id} = req.query;
-  console.log('product_id from redis middleware->', product_id);
+  // console.log('product_id from redis middleware->', product_id);
   client.get(product_id, (err, data) => {
     if (err) { throw err; }
 
     if ( data !== null) {
-      console.log('data??->', JSON.parse(data));
+      // console.log('REVIEWS********** L 25->', JSON.parse(data).length);
       res.status(200).json({
         product: product_id,
         page: 1,
@@ -37,19 +38,21 @@ const cache = (req, res, next) =>{
 };
 
 router.get('/', cache, (req, res, next) => {
+  // router.get('/', (req, res, next) => {
   // Reviews.collection.createIndex({ 'product_id': 1 });
   console.log('hello from reviews Routes', req.query);
 
-  Reviews.find({product_id: req.query.product_id})
+  Reviews.find({_id: req.query.product_id})
     // .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
-    .limit(5)
+    // .limit(5)
     .exec()
     .then(reviewData => {
       console.log('From reviews database', reviewData);
       const results = [];
       if (reviewData.length > 0) {
+        // console.log('each--->', reviewData[0].data);
         let results = [];
-        reviewData.forEach(review1 => {
+        reviewData[0].data.forEach(review1 => {
           const photoData = [];
           var review = review1.toObject();
           if (review.photos.length > 0) {
@@ -57,7 +60,7 @@ router.get('/', cache, (req, res, next) => {
               photoData.push({'id': photo.id, 'url': photo.url});
             });
           }
-          console.log('review-L27>', review, review.name, review.email);
+          console.log('review-L27>', review);
 
 
           results.push({
@@ -74,14 +77,14 @@ router.get('/', cache, (req, res, next) => {
           });
         });
         // console.log('Results---->L43', results);
-        console.log('test->', req.query.product_id);
+        // console.log('test->', req.query.product_id);
         //set data to Redis
         client.setex(req.query.product_id, 3600, JSON.stringify(results));
 
         res.status(200).json({
           product: reviewData[0].product_id,
           page: 1,
-          count: reviewData.length,
+          count: reviewData[0].data.length,
           results: results,
 
         });
@@ -105,7 +108,7 @@ router.get('/', cache, (req, res, next) => {
 
 //POST
 router.post('/', (req, res, next) => {
-  console.log('POST ROUTE', req.query);
+  // console.log('POST ROUTE', req.query);
 
   // Reviews.collection.dropIndex({ 'product_id': 1 });
   var review_id;

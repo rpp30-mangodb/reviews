@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://rpp30:hellosdc@127.0.0.1:27017/atelierDB?authSource=admin', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-// mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
-//mongosh mongodb://rpp30:hellosdc@127.0.0.1:27017/atelierDB?authSource=admin
+// mongoose.connect('mongodb://rpp30:hellosdc@127.0.0.1:27017/atelierDB?authSource=admin', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+mongoose.connect('mongodb://localhost/atelierDB', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
+//mongo mongodb://rpp30:hellosdc@127.0.0.1:27017/atelierDB?authSource=admin
 
 //layout1
 // let reviewSchema = mongoose.Schema({
