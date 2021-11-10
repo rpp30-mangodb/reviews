@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
-// import Redis from 'ioredis';
-// import JSONCache from 'redis-json';
+
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -11,8 +10,8 @@ const client = redis.createClient(REDIS_PORT);
 
 // const jsonCache = new JSONCache(redis);
 
-const Reviews = require('../mongo_database/reviews');
-// console.log('review--> L 15', Reviews );
+const Reviews = require('../mongo_database/reviews').review1;
+const checkReviewId = require('../mongo_database/reviews').reviewid;
 // const Photos = require('../mongo_database/reviewPhotos');
 
 const cache = (req, res, next) =>{
@@ -22,7 +21,7 @@ const cache = (req, res, next) =>{
     if (err) { console.log('error with cache'); throw err; }
 
     if ( data !== null) {
-      console.log('REVIEWS********** L 25->', JSON.parse(data).length);
+      // console.log('REVIEWS********** L 25->', JSON.parse(data).length);
       res.status(200).json({
         product: product_id,
         page: 1,
@@ -111,13 +110,13 @@ router.post('/', (req, res, next) => {
   // console.log('POST ROUTE', req.query);
 
   // Reviews.collection.dropIndex({ 'product_id': 1 });
-  var review_id;
+  // var review_id;
   const {product_id, rating, summary, body, recommended, name, email} = req.query;
   const {photos, characteristics} = req.query;
   // console.log('checking POST query:->', product_id, rating, summary, body, recommended, name, email, photos, characteristics);
-  Reviews.find({}).sort({id: -1}).limit(1).exec().then(lastId=>{
-    console.log('last id', lastId[0].id);
-    review_id = lastId[0].id + 1;
+  checkReviewId.find({}).sort({review_id: -1}).limit(1).exec().then(lastId=>{
+    console.log('last id', lastId[0].toObject().review_id);
+    let review_id = lastId[0].toObject().review_id + 1;
     console.log('reviewId-', review_id);
     const data = {
       //how to find the last review_id and increment it????
@@ -139,6 +138,7 @@ router.post('/', (req, res, next) => {
       .then(data=>{
         console.log('data created', data);
         res.status(201).send('CREATED');
+        checkReviewId.create({id: review_id, product_id: Number(product_id) });
       })
       .catch(err => {
         res.status(500).send(err);

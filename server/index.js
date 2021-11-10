@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
+const dummyRoute = require('../routes/K6Post');
 const loaderioRoute = require('../routes/loaderio');
 
 const PORT = process.env.PORT || 8080;
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 // ******ROUTES**********
 app.use('/reviews', reviewsRoute);
 app.use('/reviews/meta', metaRoute);
+app.use('/reviews1', dummyRoute); //for testing K6 POST request
 app.use('/loaderio-fdedfeef36d70b6f03f99f5a6a9d4fc5', loaderioRoute);
 
 app.use((req, res, next) => {
