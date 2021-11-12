@@ -90,7 +90,7 @@ router.get('/', cache, (req, res, next) => {
 
 
       } else {
-        res.status(500).json({
+        res.status(204).json({
           message: 'No valid entry found for provided ID'
         });
       }
