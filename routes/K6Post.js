@@ -8,12 +8,12 @@ const checkReviewId = require('../mongo_database/reviews').reviewid;
 // console.log('review--> L 15', DummyPost );
 
 router.post('/', (req, res, next) => {
-  console.log('POST ROUTE', req);
+  console.log('POST ROUTE---TEST--->', req);
 
   // Reviews.collection.dropIndex({ 'product_id': 1 });
   // var review_id;
   const {product_id, rating, summary, body, recommended, name, email} = req.body;
-  const {photos, characteristics} = req.query;
+  const {photos, characteristics} = req.body;
   // console.log('checking POST query:->', product_id, rating, summary, body, recommended, name, email, photos, characteristics);
   checkReviewId.find({}).sort({review_id: -1}).limit(1).exec().then(lastId=>{
     // console.log('last id', lastId[0].toObject().review_id);

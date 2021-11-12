@@ -1,11 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const app = express();
 // const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const hostname = process.env.DB_HOST;
+const user = process.env.DB_USER;
+const password = process.env.DB_PASS;
 
-// const mongoDatabase = require('../mongo_database');
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
@@ -21,10 +24,10 @@ server.listen(PORT, ()=> {
   console.log(`Server is listening at port ${PORT}`);
 });
 
-mongoose.connect('mongodb://rpp30:hellosdc@127.0.0.1:27017/atelierDB?authSource=admin', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(`mongodb://${user}:${password}@${hostname}:27017/atelierDB?authSource=admin`, {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', ()=>{
-  console.log('Connected to Atelier Database1');
+  console.log('Connected to Atelier Database');
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
