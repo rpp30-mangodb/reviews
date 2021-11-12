@@ -9,7 +9,7 @@ const hostname = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const password = process.env.DB_PASS;
 
-console.log(`hostname ${hostname}, user ${user}, password ${password}`);
+console.log(`hostname [${hostname}], user [${user}], password [${password}]`);
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 app.use('/reviews', reviewsRoute);
 app.use('/reviews/meta', metaRoute);
 app.use('/reviews1', dummyRoute); //for testing K6 POST request
-app.use('/loaderio-6745e64131d911b566f9c75cc1c43102', loaderioRoute);
+app.use('/loaderio-b91b5e711b9c57b68af2f0f0f96b9be3', loaderioRoute);
 
 app.use((req, res, next) => {
   // console.log('checking MAIN request-->', req.url);
