@@ -114,9 +114,9 @@ router.post('/', (req, res, next) => {
   const {photos, characteristics} = req.query;
   // console.log('checking POST query:->', product_id, rating, summary, body, recommended, name, email, photos, characteristics);
   checkReviewId.find({}).sort({review_id: -1}).limit(1).exec().then(lastId=>{
-    console.log('last id', lastId[0].toObject().review_id);
+    // console.log('last id', lastId[0].toObject().review_id);
     let review_id = lastId[0].toObject().review_id + 1;
-    console.log('reviewId-', review_id);
+    // console.log('reviewId-', review_id);
     const data = {
       //how to find the last review_id and increment it????
       id: review_id,

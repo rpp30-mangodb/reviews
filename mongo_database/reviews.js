@@ -2,9 +2,9 @@
 const mongoose = require('mongoose');
 
 
-/*
-layout1
-let reviewsSchema = mongoose.Schema({
+
+// layout1
+let testReviewsSchema = mongoose.Schema({
 
 
   id: Number,
@@ -27,7 +27,7 @@ let reviewsSchema = mongoose.Schema({
 
 
 });
-*/
+
 
 let reviewsSchema = mongoose.Schema({
 
@@ -67,7 +67,7 @@ let reviewidSchema = mongoose.Schema({
 // const review = mongoose.model('reviewsByProductId', reviewsSchema );
 const reviewid = mongoose.model('reviewids', reviewidSchema);
 const review1 = mongoose.model('reviews1', reviewsSchema );
-const dummyCollection = mongoose.model('dummyreview', reviewsSchema );
+const dummyCollection = mongoose.model('dummyreview', testReviewsSchema );
 
 module.exports = {review1, dummyCollection, reviewid};
 

@@ -8,7 +8,7 @@ const checkReviewId = require('../mongo_database/reviews').reviewid;
 // console.log('review--> L 15', DummyPost );
 
 router.post('/', (req, res, next) => {
-  console.log('POST ROUTE---TEST--->', req);
+  console.log('POST ROUTE---TEST--->', req.body);
 
   // Reviews.collection.dropIndex({ 'product_id': 1 });
   // var review_id;
@@ -18,9 +18,11 @@ router.post('/', (req, res, next) => {
   checkReviewId.find({}).sort({review_id: -1}).limit(1).exec().then(lastId=>{
     // console.log('last id', lastId[0].toObject().review_id);
     let review_id = lastId[0].toObject().review_id + 1;
-    console.log('reviewId-', review_id);
+    // console.log('reviewId-', review_id);
     const data = {
       //how to find the last review_id and increment it????
+
+      id: Number(product_id),
       id: review_id,
       product_id: Number(product_id),
       rating: Number(rating),
@@ -34,7 +36,10 @@ router.post('/', (req, res, next) => {
       helpfulness: 0,
       response: null,
       photos: []
+      
+
     };
+    console.log('data before send->', data);
     DummyPost.create(data)
       .then(data=>{
         console.log('data created', data);
@@ -44,6 +49,7 @@ router.post('/', (req, res, next) => {
           .catch(err => { throw err; });
       })
       .catch(err => {
+        console.log('review error');
         res.status(500).send(err);
       });
   });
