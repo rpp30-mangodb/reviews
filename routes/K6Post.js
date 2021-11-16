@@ -36,7 +36,7 @@ router.post('/', (req, res, next) => {
       helpfulness: 0,
       response: null,
       photos: []
-      
+
 
     };
     console.log('data before send->', data);
