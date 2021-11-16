@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "lint": "eslint --fix",
-    "k6": "k6 run k6StressTest/script.js",
+    "k6": "k6 run k6StressTest/postreq.js",
     "test": "nyc --reporter=text mocha 'test/review_test.js' --timeout 5000; RES=$?; kill %1; exit $RES",
     "testJasmine": "jasmine",
     "test-cover": "istanbul cover --include-all-sources test/index_test.js && istanbul check-coverage",

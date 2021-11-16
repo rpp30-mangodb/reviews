@@ -21,19 +21,25 @@ export const options = {
 
 // eslint-disable-next-line func-style
 export default function () {
-  for (let id = 99950; id <= 1000000; id++) {
-    const resp = http.batch([
-      ['GET', `http://localhost:8080/reviews/meta/?product_id=${id}` ],
-      ['GET', `http://localhost:8080/reviews/?product_id=${id}`],
-    ]);
+  // for (let id = 99950; id <= 1000000; id++) {
+  const min = 900550;
+  const max = 1000000;
+  const getRandomArbitrary = (min, max) => {
+    return Math.random() * (max - min) + min;
+  };
+  const id = getRandomArbitrary(min, max);
+  const resp = http.batch([
+    ['GET', `http://localhost:8080/reviews/meta/?product_id=${id}` ],
+    ['GET', `http://localhost:8080/reviews/?product_id=${id}`],
+  ]);
 
-    check(resp[0], {
-      'main page status was 200': (res) => res.status === 200,
-    });
-    sleep(1);
-  }
-
+  check(resp[0], {
+    'main page status was 200': (res) => res.status === 200,
+  });
+  sleep(1);
 }
+
+// }
 
 // export default function () {
 //   for (let id = 99900; id <= 99950; id++) {

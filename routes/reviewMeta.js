@@ -9,16 +9,18 @@ const client = redis.createClient(REDIS_PORT);
 //notworking- 5501
 const Characteristic = require('../mongo_database/characteristic');
 const Characteristic_reviews = require('../mongo_database/reviewChara');
-const Reviews = require('../mongo_database/reviews');
+const Reviews = require('../mongo_database/reviews').review1;
 
 const cache = (req, res, next) =>{
   const {product_id} = req.query;
-  console.log('product_id from redis middleware reviewMeta->', product_id);
-  client.get(product_id, (err, data) => {
+  let redisKey = req.query.product_id.toString() + 'meta';
+  // console.log('RedisKey-L17--->', redisKey);
+  // console.log('product_id from redis middleware reviewMeta->', product_id);
+  client.get(redisKey, (err, data) => {
     if (err) { throw err; }
 
     if ( data !== null) {
-      console.log('data? from Meta->', JSON.parse(data));
+      // console.log('MMMMMMMMM Meta CACHE route L21->', JSON.parse(data));
       res.status(200).json({
         product_id: product_id,
         ratings: JSON.parse(data).rating,
@@ -133,7 +135,7 @@ const computation = (charData, data)=>{
 router.get('/', cache, (req, res, next) => {
   // console.log('This is from MetaData Route', req.query);
 
-  Reviews.find({product_id: req.query.product_id})
+  Reviews.find({_id: req.query.product_id})
     .exec()
     .then(meta1=> {
       // console.log('From database----------------------', meta1);
@@ -166,7 +168,9 @@ router.get('/', cache, (req, res, next) => {
               // console.log('metaChar-->', metaChar);
               const results = {'rating': ratingResult, 'recommended': recommendResult, 'characteristics': metaChar };
               //set data to Redis
-              client.setex(req.query.product_id, 3600, JSON.stringify(results));
+              let redisKey = req.query.product_id.toString() + 'meta';
+              // console.log('RedisKey-L170>', redisKey);
+              client.setex(redisKey, 3600, JSON.stringify(results));
               if (true) {
                 res.status(200).json({
                   product_id: req.query.product_id,
@@ -181,13 +185,13 @@ router.get('/', cache, (req, res, next) => {
 
             })
             .catch(error=>{
-              console.log('**L153**error getting Characteristic_reviews', error);
+              // console.log('**L153**error getting Characteristic_reviews', error);
               res.status(404).json({ message: 'No review Meta data found for provided ID' });
             });
         });
     })
     .catch(err=>{
-      console.log(err);
+      // console.log(err);
       res.status(404).json({ message: 'No review Meta data found for provided ID' });
     });
 
