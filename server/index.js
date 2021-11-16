@@ -5,11 +5,11 @@ const app = express();
 // const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const hostname = process.env.DB_HOST;
-const user = process.env.DB_USER;
-const password = process.env.DB_PASS;
+// const hostname = process.env.DB_HOST;
+// const user = process.env.DB_USER;
+// const password = process.env.DB_PASS;
 
-console.log(`hostname [${hostname}], user [${user}], password [${password}]`);
+// console.log(`hostname [${hostname}], user [${user}], password [${password}]`);
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
@@ -25,10 +25,10 @@ server.listen(PORT, ()=> {
   console.log(`Server is listening at port ${PORT}`);
 });
 
-mongoose.connect(`mongodb://${user}:${password}@${hostname}:27017/atelierDB?authSource=admin`, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://rpp30:hellosdc@3.208.12.207:27017/atelierDB?authSource=admin', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', ()=>{
-  console.log('Connected to Atelier Database');
+  console.log('Connected to Atelier Database aws!');
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 app.use('/reviews', reviewsRoute);
 app.use('/reviews/meta', metaRoute);
 app.use('/reviews1', dummyRoute); //for testing K6 POST request
-app.use('/loaderio-b91b5e711b9c57b68af2f0f0f96b9be3', loaderioRoute);
+app.use('/loaderio-1443bf4c8a3206e3d713a7224f4b0da6', loaderioRoute);
 
 app.use((req, res, next) => {
   // console.log('checking MAIN request-->', req.url);

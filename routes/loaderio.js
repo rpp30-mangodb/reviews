@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 router.get('/', (req, res, next) => {
-  res.send('loaderio-b91b5e711b9c57b68af2f0f0f96b9be3');
-
-
+  res.send('loaderio-1443bf4c8a3206e3d713a7224f4b0da6');
 });
 
 module.exports = router;
