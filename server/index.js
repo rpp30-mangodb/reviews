@@ -5,11 +5,11 @@ const app = express();
 // const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const hostname = process.env.DB_HOST;
-const user = process.env.DB_USER;
-const password = process.env.DB_PASS;
+// const hostname = process.env.DB_HOST;
+// const user = process.env.DB_USER;
+// const password = process.env.DB_PASS;
 
-console.log(`hostname [${hostname}], user [${user}], password [${password}]`);
+// console.log(`hostname [${hostname}], user [${user}], password [${password}]`);
 
 const reviewsRoute = require('../routes/reviewsApi');
 const metaRoute = require('../routes/reviewMeta');
