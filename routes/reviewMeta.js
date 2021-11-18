@@ -185,8 +185,8 @@ router.get('/', cache, (req, res, next) => {
 
             })
             .catch(error=>{
-              // console.log('**L153**error getting Characteristic_reviews', error);
-              res.status(404).json({ message: 'No review Meta data found for provided ID' });
+              console.log('**L153**error getting Characteristic_reviews', error);
+              res.status(204).json({ message: 'No review Meta data found for provided ID' });
             });
         });
     })

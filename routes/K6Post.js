@@ -8,7 +8,7 @@ const checkReviewId = require('../mongo_database/reviews').reviewid;
 // console.log('review--> L 15', DummyPost );
 
 router.post('/', (req, res, next) => {
-  console.log('POST ROUTE---TEST--->', req);
+  console.log('POST ROUTE---Stress TEST--->', req);
 
   // Reviews.collection.dropIndex({ 'product_id': 1 });
   // var review_id;

@@ -59,7 +59,7 @@ router.get('/', cache, (req, res, next) => {
               photoData.push({'id': photo.id, 'url': photo.url});
             });
           }
-          console.log('review-L27>', review);
+          // console.log('review-L62>', review);
 
 
           results.push({
@@ -90,6 +90,7 @@ router.get('/', cache, (req, res, next) => {
 
 
       } else {
+        consolelog('ID not found', req.query.product_id);
         res.status(204).json({
           message: 'No valid entry found for provided ID'
         });

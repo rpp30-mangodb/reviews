@@ -25,7 +25,7 @@ server.listen(PORT, ()=> {
   console.log(`Server is listening at port ${PORT}`);
 });
 
-mongoose.connect(`mongodb://${user}:${password}@${hostname}:27017/atelierDB?authSource=admin`, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://rpp30:hellosdc@3.212.17.78:27017/atelierDB?authSource=admin', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', ()=>{
   console.log('Connected to Atelier Database');
@@ -55,13 +55,14 @@ app.use('/reviews1', dummyRoute); //for testing K6 POST request
 app.use('/loaderio-b91b5e711b9c57b68af2f0f0f96b9be3', loaderioRoute);
 
 app.use((req, res, next) => {
-  // console.log('checking MAIN request-->', req.url);
+  console.log('checking MAIN request-->', req.url);
   const error = new Error('Not found');
   error.status = 404;
   next(error);
 });
 
 app.use((error, req, res, next) => {
+  console.log('error');
   res.status(error.status || 500);
   res.json({
     error: {
