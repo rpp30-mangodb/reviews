@@ -16,7 +16,7 @@ const checkReviewId = require('../mongo_database/reviews').reviewid;
 
 const cache = (req, res, next) =>{
   const {product_id} = req.query;
-  console.log('product_id from redis middleware->', product_id);
+  // console.log('product_id from redis middleware->', product_id);
   client.get(product_id, (err, data) => {
     if (err) { console.log('error with cache'); throw err; }
 
@@ -39,14 +39,14 @@ const cache = (req, res, next) =>{
 router.get('/', cache, (req, res, next) => {
   // router.get('/', (req, res, next) => {
   // Reviews.collection.createIndex({ 'product_id': 1 });
-  console.log('hello from reviews Routes', req.query);
+  // console.log('hello from reviews Routes', req.query);
 
   Reviews.find({_id: req.query.product_id})
     // .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
     // .limit(5)
     .exec()
     .then(reviewData => {
-      console.log('From reviews database', reviewData);
+      // console.log('From reviews database', reviewData);
       const results = [];
       if (reviewData.length > 0) {
         // console.log('each--->', reviewData[0].data);
@@ -90,7 +90,7 @@ router.get('/', cache, (req, res, next) => {
 
 
       } else {
-        consolelog('ID not found', req.query.product_id);
+        // consolelog('ID not found', req.query.product_id);
         res.status(204).json({
           message: 'No valid entry found for provided ID'
         });
@@ -100,7 +100,63 @@ router.get('/', cache, (req, res, next) => {
 
     .catch(err => {
       console.log(err);
-      res.status(500).json({ error: err });
+      Reviews.find({_id: req.query.product_id})
+      // .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+      // .limit(5)
+        .exec()
+        .then(reviewData => {
+          // console.log('From reviews database', reviewData);
+          const results = [];
+          if (reviewData.length > 0) {
+            // console.log('each--->', reviewData[0].data);
+            let results = [];
+            reviewData[0].data.forEach(review1 => {
+              const photoData = [];
+              var review = review1.toObject();
+              if (review.photos.length > 0) {
+                review.photos.forEach(photo => {
+                  photoData.push({'id': photo.id, 'url': photo.url});
+                });
+              }
+              // console.log('review-L62>', review);
+
+
+              results.push({
+                'review_id': review.id,
+                'rating': review.rating,
+                'summary': review.summary,
+                'recommend': review.recommend,
+                'response': review.response || null,
+                'body': review.body,
+                'date': review.date,
+                'reviewer_name': review.reviewer_name,
+                'helpfulness': review.helpfulness,
+                'photos': photoData
+              });
+            });
+            // console.log('Results---->L43', results);
+            // console.log('test->', req.query.product_id);
+            //set data to Redis
+            client.setex(req.query.product_id, 3600, JSON.stringify(results));
+
+            res.status(200).json({
+              product: reviewData[0].product_id,
+              page: 1,
+              count: reviewData[0].data.length,
+              results: results,
+
+            });
+
+
+          } else {
+            // consolelog('ID not found', req.query.product_id);
+            res.status(204).json({
+              message: 'No valid entry found for provided ID'
+            });
+          }
+
+        });
+      // res.status(500).json({ error: err });
 
     });
 
